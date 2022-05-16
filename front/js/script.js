@@ -44,7 +44,7 @@ fetch(urlApi)
 			articles.appendChild(img);
 
 			const title = document.createElement('h3');
-			title.classList.add('productNam');
+			title.classList.add('productName');
 			title.textContent = `${article.name}`;
 			articles.appendChild(title);
 

@@ -3,10 +3,10 @@ const urlApi = 'http://localhost:3000/api/products/';
 
 function addColorSelection(product) {
 	const selectColor = document.getElementById('colors');
-	for (couleur of product.colors) {
-		let option = document.createElement('option');
-		option.setAttribute('product', couleur);
-		option.textContent = couleur;
+	for (const color of product.colors) {
+		const option = document.createElement('option');
+		option.setAttribute('product', color);
+		option.textContent = color;
 		selectColor.appendChild(option);
 	}
 }
@@ -26,10 +26,12 @@ fetch(urlApiProduits)
 	.then(function (product) {
 		//mettre en relations les info produit avec le html
 
-		//a changer innerhtml
-		document.querySelector(
-			'.item__img'
-		).innerHTML = `<img src="${product.imageUrl}" alt="Photographie d'un canapé"></img>`;
+		const itemImg = document.createElement('img');
+		document.querySelector('.item__img').appendChild(itemImg).src =
+			product.imageUrl;
+		document.querySelector('.item__img').appendChild(itemImg).alt =
+			product.altTxt;
+
 		document.querySelector('#title').textContent = product.name;
 		document.querySelector('#price').textContent = product.price;
 		document.querySelector('#description').textContent = product.description;
@@ -45,12 +47,12 @@ fetch(urlApiProduits)
 
 //Ecouter le bouton du panier
 
-document.querySelector('#addToCart').addEventListener('click', (event) => {
+document.querySelector('#addToCart').addEventListener('click', () => {
 	//Creation de l'objet avant de mettre dans le local storage
-	let color = document.getElementById('colors').value;
-	let quantity = document.getElementById('quantity').value;
+	const color = document.getElementById('colors').value;
+	const quantity = document.getElementById('quantity').value;
 
-	let sofa = {
+	const sofa = {
 		id: id,
 		quantities: quantity,
 		colors: color,
