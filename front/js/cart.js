@@ -97,7 +97,82 @@ function totalPrice() {
 		});
 }
 
-function displayStorage() {}
+function displayStorage(id, color, imageUrl, altTxt, price, quantity, name) {
+	//Sur la page
+	const cartItem = document.getElementById('cart__items');
+	const article = document.createElement('article');
+	cartItem.appendChild(article);
+	article.setAttribute('data-id', id);
+	article.setAttribute('data-color', color);
+	article.classList.add('cart__item');
+
+	//Creation de la div image
+	const baliseDiv = document.createElement('div');
+	baliseDiv.classList.add('cart__item__img');
+	article.appendChild(baliseDiv);
+
+	//image du produit
+	const baliseDivImg = document.createElement('img');
+	baliseDiv.appendChild(baliseDivImg);
+	baliseDivImg.src = imageUrl;
+	baliseDivImg.alt = altTxt;
+
+	//Creation des details de l'article
+	const divArcticle = document.createElement('div');
+	divArcticle.classList.add('cart__item__content');
+	article.appendChild(divArcticle);
+
+	const divArcticleDetail = document.createElement('div');
+	divArcticleDetail.classList.add('cart__item__content__description');
+	divArcticle.appendChild(divArcticleDetail);
+
+	//Nom couleur prix
+	const divArcticleDetailH2 = document.createElement('h2');
+	divArcticleDetailH2.textContent = name;
+	divArcticleDetail.appendChild(divArcticleDetailH2);
+
+	const divArcticleDetailP1 = document.createElement('p');
+	divArcticleDetailP1.textContent = color;
+	divArcticleDetail.appendChild(divArcticleDetailP1);
+
+	const divArcticleDetailP2 = document.createElement('p');
+	divArcticleDetailP2.textContent = price + ' €';
+	divArcticleDetail.appendChild(divArcticleDetailP2);
+
+	//Quantité
+	const divArticleSetting = document.createElement('div');
+	divArticleSetting.classList.add('cart__item__content__settings');
+	divArcticle.appendChild(divArticleSetting);
+
+	const divArticleSettingQuant = document.createElement('div');
+	divArticleSettingQuant.classList.add(
+		'cart__item__content__settings__quantity'
+	);
+	divArticleSetting.appendChild(divArticleSettingQuant);
+
+	const cartQuantity = document.createElement('p');
+	cartQuantity.textContent = 'Quantité : ';
+	divArticleSetting.appendChild(cartQuantity);
+
+	const cartQuantityInput = document.createElement('input');
+	divArticleSetting.appendChild(cartQuantityInput);
+	cartQuantityInput.setAttribute('input', 'number');
+	cartQuantityInput.setAttribute('name', 'itemQuantity');
+	cartQuantityInput.setAttribute('min', '1');
+	cartQuantityInput.setAttribute('max', '100');
+	cartQuantityInput.setAttribute('value', quantity);
+	cartQuantityInput.classList.add('itemQuantity');
+
+	//supprimer
+	const divDeleteItem = document.createElement('div');
+	divArcticle.appendChild(divDeleteItem);
+	divDeleteItem.classList.add('cart__item__content__settings__delete');
+
+	const pDeleteItem = document.createElement('p');
+	divDeleteItem.appendChild(pDeleteItem);
+	pDeleteItem.classList.add('deleteItem');
+	pDeleteItem.textContent = 'Supprimer';
+}
 
 function useFetch() {
 	fetch('http://localhost:3000/api/products')
@@ -119,81 +194,7 @@ function useFetch() {
 				const altTxt = articleAPI[indexId].altTxt;
 				const name = articleAPI[indexId].name;
 				const quantity = articles['quantities'];
-
-				//Sur la page
-				const cartItem = document.getElementById('cart__items');
-				const article = document.createElement('article');
-				cartItem.appendChild(article);
-				article.setAttribute('data-id', id);
-				article.setAttribute('data-color', color);
-				article.classList.add('cart__item');
-
-				//Creation de la div image
-				const baliseDiv = document.createElement('div');
-				baliseDiv.classList.add('cart__item__img');
-				article.appendChild(baliseDiv);
-
-				//image du produit
-				const baliseDivImg = document.createElement('img');
-				baliseDiv.appendChild(baliseDivImg);
-				baliseDivImg.src = imageUrl;
-				baliseDivImg.alt = altTxt;
-
-				//Creation des details de l'article
-				const divArcticle = document.createElement('div');
-				divArcticle.classList.add('cart__item__content');
-				article.appendChild(divArcticle);
-
-				const divArcticleDetail = document.createElement('div');
-				divArcticleDetail.classList.add('cart__item__content__description');
-				divArcticle.appendChild(divArcticleDetail);
-
-				//Nom couleur prix
-				const divArcticleDetailH2 = document.createElement('h2');
-				divArcticleDetailH2.textContent = name;
-				divArcticleDetail.appendChild(divArcticleDetailH2);
-
-				const divArcticleDetailP1 = document.createElement('p');
-				divArcticleDetailP1.textContent = color;
-				divArcticleDetail.appendChild(divArcticleDetailP1);
-
-				const divArcticleDetailP2 = document.createElement('p');
-				divArcticleDetailP2.textContent = price + ' €';
-				divArcticleDetail.appendChild(divArcticleDetailP2);
-
-				//Quantité
-				const divArticleSetting = document.createElement('div');
-				divArticleSetting.classList.add('cart__item__content__settings');
-				divArcticle.appendChild(divArticleSetting);
-
-				const divArticleSettingQuant = document.createElement('div');
-				divArticleSettingQuant.classList.add(
-					'cart__item__content__settings__quantity'
-				);
-				divArticleSetting.appendChild(divArticleSettingQuant);
-
-				const cartQuantity = document.createElement('p');
-				cartQuantity.textContent = 'Quantité : ';
-				divArticleSetting.appendChild(cartQuantity);
-
-				const cartQuantityInput = document.createElement('input');
-				divArticleSetting.appendChild(cartQuantityInput);
-				cartQuantityInput.setAttribute('input', 'number');
-				cartQuantityInput.setAttribute('name', 'itemQuantity');
-				cartQuantityInput.setAttribute('min', '1');
-				cartQuantityInput.setAttribute('max', '100');
-				cartQuantityInput.setAttribute('value', quantity);
-				cartQuantityInput.classList.add('itemQuantity');
-
-				//supprimer
-				const divDeleteItem = document.createElement('div');
-				divArcticle.appendChild(divDeleteItem);
-				divDeleteItem.classList.add('cart__item__content__settings__delete');
-
-				const pDeleteItem = document.createElement('p');
-				divDeleteItem.appendChild(pDeleteItem);
-				pDeleteItem.classList.add('deleteItem');
-				pDeleteItem.textContent = 'Supprimer';
+				displayStorage(id, color, imageUrl, altTxt, price, quantity, name);
 			}
 			itemDelete();
 			itemModifQuantity();
