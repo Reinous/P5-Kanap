@@ -11,13 +11,15 @@ function compareId(x, y) {
 	}
 	return 0;
 }
-articleCart.sort(compareId);
+function sortItem() {
+	articleCart.sort(compareId);
+}
 
 //affichage du panier trier par id dans la console
-console.log(
-	'Contenu du panier dans le local storage au chargement de la page ='
-);
-console.table(articleCart);
+// console.log(
+// 	'Contenu du panier dans le local storage au chargement de la page ='
+// );
+// console.table(articleCart);
 
 //Fonction de suppression d'article
 function itemDelete() {
@@ -43,6 +45,7 @@ function itemModifQuantity() {
 			numberItem();
 			numberTotalItem();
 			totalPrice();
+			sortItem();
 		});
 	}
 }
@@ -94,15 +97,17 @@ function totalPrice() {
 		});
 }
 
-async function displayStorage() {
+function displayStorage() {}
+
+function useFetch() {
 	fetch('http://localhost:3000/api/products')
 		.then(function (reponseAPI) {
 			return reponseAPI.json();
 		})
 
 		.then(function (articleAPI) {
-			console.log("CONTENU DE L'API =");
-			console.table(articleAPI);
+			//console.log("CONTENU DE L'API =");
+			//console.table(articleAPI);
 			let idArticlesAPI = articleAPI.map((el) => el._id);
 
 			for (const articles of articleCart) {
@@ -117,7 +122,6 @@ async function displayStorage() {
 
 				//Sur la page
 				const cartItem = document.getElementById('cart__items');
-
 				const article = document.createElement('article');
 				cartItem.appendChild(article);
 				article.setAttribute('data-id', id);
@@ -202,32 +206,18 @@ async function displayStorage() {
 			console.log(error);
 		});
 }
-
-//check prenom
-function checkFirstName(firstNameValue) {
+function checkName(nameValue, id, message) {
 	const letterRegExp = new RegExp("^[a-zA-Z ,.'-]+$");
-	const errorFirstName = document.getElementById('firstNameErrorMsg');
-	if (letterRegExp.test(firstNameValue)) {
+	const errorFirstName = document.getElementById(id);
+	if (letterRegExp.test(nameValue)) {
 		errorFirstName.textContent = '';
-		console.log('Prenom Bon');
+		console.log('nom Bon');
 	} else {
-		errorFirstName.textContent = 'Veuillez renseigner votre prénom';
-		console.log('Prenom Pas Bon');
+		errorFirstName.textContent = message;
+		console.log('nom Pas Bon');
 	}
 }
 
-//check Nom
-function checkLastName(lastNameValue) {
-	const letterRegExp = new RegExp("^[a-zA-Z ,.'-]+$");
-	const errorLastName = document.getElementById('lastNameErrorMsg');
-	if (letterRegExp.test(lastNameValue)) {
-		errorLastName.textContent = '';
-		console.log('Nom Bon');
-	} else {
-		errorLastName.textContent = 'Veuillez renseigner votre nom';
-		console.log('Nom Pas Bon');
-	}
-}
 //check Adresse
 function checkAdress(addressValue) {
 	const errorAddress = document.getElementById('addressErrorMsg');
@@ -273,12 +263,20 @@ function form() {
 
 	//modification du prenom
 	userData.firstName.addEventListener('change', function (event) {
-		checkFirstName(event.target.value);
+		checkName(
+			event.target.value,
+			'firstNameErrorMsg',
+			'Veuillez renseigner votre Prénom'
+		);
 	});
 
 	//modification nom
 	userData.lastName.addEventListener('change', function (event) {
-		checkLastName(event.target.value);
+		checkName(
+			event.target.value,
+			'lastNameErrorMsg',
+			'Veuillez renseigner votre Nom'
+		);
 	});
 
 	//modification address
@@ -350,7 +348,7 @@ function formSend() {
 				localStorage.setItem('orderId', responseID.orderId);
 				//Allez a la page de confirmation de commande
 				document.location.href = 'confirmation.html';
-				console.log(order);
+				//console.log(order);
 			})
 			.catch(function (error) {
 				console.log('Erreur Confimation');
@@ -359,6 +357,19 @@ function formSend() {
 	});
 }
 
-displayStorage();
-form();
-formSend();
+//Si le panier es vide
+function CartEmpty() {
+	const empty = document.getElementById(
+		'cartAndFormContainer'
+	).firstElementChild;
+
+	if (articleCart == 0 || articleCart === null) {
+		empty.textContent = 'Votre panier est vide';
+	} else {
+		useFetch();
+		form();
+		formSend();
+	}
+}
+
+CartEmpty();

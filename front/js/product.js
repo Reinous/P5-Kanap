@@ -87,6 +87,7 @@ function getSofa() {
 
 //Voir si le canapé existe deja dans le panier ou pas en verifiant la couleur et id du produit sinn push
 function addSofa(product) {
+	const quantity = document.getElementById('quantity');
 	const sofa = getSofa();
 	const foundProduct = sofa.find(
 		(p) => p.id == product.id && p.colors == product.colors
