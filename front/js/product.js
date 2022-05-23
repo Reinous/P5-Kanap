@@ -12,6 +12,7 @@ function addColorSelection(product) {
 }
 
 //url searchparams pour récupérer l'id et le mettre avec l'api
+// Mettre en fonction
 const params = new URL(document.location).searchParams;
 const id = params.get('id');
 const urlApiProduits = new URL(id, urlApi);
@@ -25,7 +26,6 @@ fetch(urlApiProduits)
 	})
 	.then(function (product) {
 		//mettre en relations les info produit avec le html
-
 		const itemImg = document.createElement('img');
 		document.querySelector('.item__img').appendChild(itemImg).src =
 			product.imageUrl;

@@ -41,11 +41,15 @@ function itemModifQuantity() {
 		itemChangeQuantity[i].addEventListener('change', function () {
 			const newQuantity = itemChangeQuantity[i].value;
 			articleCart[i].quantities = newQuantity;
-			localStorage.setItem('cart', JSON.stringify(articleCart));
-			numberItem();
-			numberTotalItem();
-			totalPrice();
-			sortItem();
+			if (newQuantity > 0 && newQuantity <= 100) {
+				localStorage.setItem('cart', JSON.stringify(articleCart));
+				numberItem();
+				numberTotalItem();
+				totalPrice();
+				sortItem();
+			} else if (newQuantity <= 0 || newQuantity > 100) {
+				alert('Veuillez selectionner une quantité entre 0 et 100.');
+			}
 		});
 	}
 }
@@ -222,7 +226,7 @@ function checkName(nameValue, id, message) {
 //check Adresse
 function checkAdress(addressValue) {
 	const errorAddress = document.getElementById('addressErrorMsg');
-	const addressRegExp = new RegExp('[^A-Za-z0-9]');
+	const addressRegExp = new RegExp('^[A-Za-z0-9]');
 	if (addressRegExp.test(addressValue)) {
 		errorAddress.textContent = '';
 		console.log('Adresse Bon');
@@ -344,11 +348,13 @@ function formSend() {
 				return reponseAPI.json();
 			})
 
+			//A CHANGER ne pas stocker
 			.then(function (responseID) {
 				localStorage.clear();
-				localStorage.setItem('orderId', responseID.orderId);
+				//localStorage.setItem('orderId', responseID.orderId);
 				//Allez a la page de confirmation de commande
-				document.location.href = 'confirmation.html';
+				document.location.href =
+					'confirmation.html?orderId=' + responseID.orderId;
 				//console.log(order);
 			})
 			.catch(function (error) {
@@ -359,7 +365,7 @@ function formSend() {
 }
 
 //Si le panier es vide
-function CartEmpty() {
+function isCartEmpty() {
 	const empty = document.getElementById(
 		'cartAndFormContainer'
 	).firstElementChild;
@@ -373,4 +379,4 @@ function CartEmpty() {
 	}
 }
 
-CartEmpty();
+isCartEmpty();
